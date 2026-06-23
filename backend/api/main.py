@@ -76,9 +76,8 @@ class DiabetesFeatures(BaseModel):
     age: int
 
 # 2) Build correct path to the model file
-# backend/app.py → parent is project root
-BASE_DIR = Path(__file__).resolve().parent.parent
-MODEL_PATH = BASE_DIR / "frontend" / "pipeline" / "model" / "diabetes_model.pkl"
+# backend/api/main.py → parent is backend/api
+MODEL_PATH = Path(__file__).resolve().parent / "diabetes_model.pkl"
 
 # 3) Load the trained model with joblib
 classifier = joblib.load(MODEL_PATH)
