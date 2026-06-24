@@ -85,7 +85,8 @@ if submitted:
 
     try:
         # Call FastAPI backend
-        response = requests.post("http://localhost:8000/predict", json=payload)
+        # API_URL = "https://diabetes-prediction-dun.vercel.app/predict"
+        response = requests.post("https://diabetes-prediction-dun.vercel.app/predict", json=payload)
         response.raise_for_status()  # raise error if status != 200
 
         data = response.json()
