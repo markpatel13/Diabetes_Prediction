@@ -1,8 +1,12 @@
-fastapi
-uvicorn[standard]
+# fastapi
+# uvicorn[standard]
+# streamlit
+# joblib
+# scikit-learn
+# numpy
+# pandas
+# matplotlib
 streamlit
-joblib
-scikit-learn
-numpy
-pandas
+requests
 matplotlib
+numpy
