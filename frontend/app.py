@@ -5,6 +5,9 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 
+API_URL = "https://diabetes-prediction-dun.vercel.app/predict"
+
+
 st.set_page_config(
     page_title="Diabetes Prediction",
     page_icon="🩺",
@@ -173,7 +176,7 @@ if submitted:
     }
 
     try:
-        response = requests.post("http://127.0.0.1:8000/predict", json=payload, timeout=10)
+        response = requests.post(API_URL, json=payload, timeout=10)
         response.raise_for_status()
 
         data = response.json()
