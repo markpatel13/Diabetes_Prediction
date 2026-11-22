@@ -49,20 +49,59 @@ st.sidebar.info(
     "served via a FastAPI backend to predict diabetes risk."
 )
 
+profile = st.selectbox(
+    "Test Profile",
+    ("Custom", "Low-risk example", "High-risk example"),
+)
+
+if profile == "Low-risk example":
+    default_values = {
+        "pregnancies": 1,
+        "glucose": 85,
+        "bloodpressure": 70,
+        "skinthickness": 20,
+        "insulin": 80,
+        "bmi": 22.0,
+        "dpf": 0.2,
+        "age": 22,
+    }
+elif profile == "High-risk example":
+    default_values = {
+        "pregnancies": 8,
+        "glucose": 155,
+        "bloodpressure": 62,
+        "skinthickness": 26,
+        "insulin": 495,
+        "bmi": 34.0,
+        "dpf": 0.543,
+        "age": 46,
+    }
+else:
+    default_values = {
+        "pregnancies": 1,
+        "glucose": 120,
+        "bloodpressure": 120,
+        "skinthickness": 20,
+        "insulin": 80,
+        "bmi": 25.0,
+        "dpf": 0.5,
+        "age": 30,
+    }
+
 with st.form("diabetes_form"):
     col1, col2 = st.columns(2)
 
     with col1:
-        pregnancies = st.number_input("Pregnancies", min_value=0, max_value=20, value=1, step=1)
-        glucose = st.number_input("Glucose", min_value=0, max_value=300, value=120, step=1)
-        bloodpressure = st.number_input("Blood Pressure (Systolic)", min_value=0, max_value=200, value=120, step=1)
-        skinthickness = st.number_input("Skin Thickness", min_value=0, max_value=100, value=20, step=1)
+        pregnancies = st.number_input("Pregnancies", min_value=0, max_value=20, value=default_values["pregnancies"], step=1)
+        glucose = st.number_input("Glucose", min_value=0, max_value=300, value=default_values["glucose"], step=1)
+        bloodpressure = st.number_input("Blood Pressure", min_value=0, max_value=200, value=default_values["bloodpressure"], step=1)
+        skinthickness = st.number_input("Skin Thickness", min_value=0, max_value=100, value=default_values["skinthickness"], step=1)
 
     with col2:
-        insulin = st.number_input("Insulin", min_value=0, max_value=900, value=80, step=1)
-        bmi = st.number_input("BMI", min_value=0.0, max_value=70.0, value=25.0, step=0.1, format="%.1f")
-        dpf = st.number_input("Diabetes Pedigree Function (DPF)", min_value=0.0, max_value=3.0, value=0.5, step=0.01)
-        age = st.number_input("Age", min_value=1, max_value=120, value=30, step=1)
+        insulin = st.number_input("Insulin", min_value=0, max_value=900, value=default_values["insulin"], step=1)
+        bmi = st.number_input("BMI", min_value=0.0, max_value=70.0, value=default_values["bmi"], step=0.1, format="%.1f")
+        dpf = st.number_input("Diabetes Pedigree Function (DPF)", min_value=0.0, max_value=3.0, value=default_values["dpf"], step=0.01)
+        age = st.number_input("Age", min_value=1, max_value=120, value=default_values["age"], step=1)
 
     submitted = st.form_submit_button("Predict")
 
@@ -134,7 +173,7 @@ if submitted:
     }
 
     try:
-        response = requests.post("https://diabetes-prediction-dun.vercel.app/predict", json=payload)
+        response = requests.post("http://127.0.0.1:8000/predict", json=payload, timeout=10)
         response.raise_for_status()
 
         data = response.json()
