@@ -5,7 +5,6 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
-import sys
 
 # Handle relative imports for both module and direct execution
 try:
@@ -34,7 +33,40 @@ def load_and_preprocess(test_size=0.2, random_state=0):
     X = df.drop(columns='Outcome')
     y = df['Outcome']
 
-    return train_test_split(X, y, test_size=test_size, random_state=random_state)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X,
+        y,
+        test_size=test_size,
+        random_state=random_state,
+        stratify=y
+    )
+
+    # Balance the training set only. Oversampling the test set would make
+    # evaluation metrics artificially optimistic.
+    train_data = pd.concat(
+        [X_train, y_train.rename('Outcome')],
+        axis=1
+    )
+    target_count = train_data['Outcome'].value_counts().max()
+
+    balanced_parts = []
+    for outcome, class_data in train_data.groupby('Outcome'):
+        if len(class_data) < target_count:
+            class_data = class_data.sample(
+                n=target_count,
+                replace=True,
+                random_state=random_state
+            )
+        balanced_parts.append(class_data)
+
+    balanced_train_data = pd.concat(balanced_parts).sample(
+        frac=1,
+        random_state=random_state
+    )
+    X_train = balanced_train_data.drop(columns='Outcome')
+    y_train = balanced_train_data['Outcome']
+
+    return X_train, X_test, y_train, y_test
 
 
 def check_feature_correlation(test_size=0.2, random_state=0, plot=True):
