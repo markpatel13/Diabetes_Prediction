@@ -173,3 +173,12 @@ Where `0` means low risk and `1` means high risk.
 - If you see import errors in the pipeline scripts, run them from inside `frontend/pipeline/` or use the package-aware invocation from the project root.
 - If FastAPI cannot load the model, confirm that `backend/api/diabetes_model.pkl` exists.
 - If Streamlit cannot connect to the API, make sure the backend is reachable on the expected host and port.
+
+
+<!-- cd C:\Users\Dell\OneDrive\Desktop\Diabetes_Prediction
+python -m streamlit run frontend\app.py -->
+
+<!-- cd C:\Users\Dell\OneDrive\Desktop\Diabetes_Prediction
+python -m uvicorn backend.api.main:app --reload --port 8000 -->
+
+<!-- API_URL = "http://127.0.0.1:8000/predict" -->
